@@ -1,0 +1,21 @@
+MODEL:
+    DEVICE: cpu
+    NUM_CLASSES: 6
+    DROPOUT: 0.25
+    HIDDEN_NEURONS: 1024
+DATASETS:
+    TRAIN: data/datasets/train.csv
+    TEST: data/datasets/test.csv
+    TEST_WA: data/datasets/STSint.testinput.answers-students.wa
+DATALOADER:
+    NUM_WORKERS: 8
+SOLVER:
+    OPTIMIZER_NAME: ADAM
+    MAX_EPOCHS: 100
+    BASE_LR: 0.0001
+    LOG_PERIOD: 100
+    BATCH_SIZE: 1
+TEST:
+    BATCH_SIZE: 1
+    TEST_WEIGHT: ~
+OUTPUT_DIR: output

@@ -1,0 +1,5 @@
+.idea/
+venv/
+output/
+semeval_data/
+*/__pycache__/*
