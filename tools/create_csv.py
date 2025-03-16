@@ -6,7 +6,37 @@ import sys
 sys.path.append(".")
 from net_default_cfg.default_config import get_default_config
 from logger.logger import create_logger
+import numpy as np
 
+def one_hot_encoding_type(exp_type):
+    types_map = {
+        'EQUI' : 5, 
+        'OPPO' : 4,
+        'SPE1' : 3,
+        'SPE2' : 2,
+        'SIMI' : 1,
+        'REL' : 0
+    }
+
+    one_hot = list(np.zeros(len(types_map), dtype = int))
+    one_hot[types_map[exp_type]] = 1
+
+    return one_hot
+   
+def one_hot_encoding_score(value):
+    scores_map = {
+        '5' : 5, 
+        '4' : 4,
+        '3' : 3,
+        '2' : 2,
+        '1' : 1,
+        '0' : 0
+    }
+
+    one_hot = list(np.zeros(len(scores_map), dtype = int))
+    one_hot[scores_map[value]] = 1
+
+    return one_hot
 
 def create_csv(data_files: list[str], file_name: str) -> None:
     alignment_start_pattern = re.compile(r"<alignment>")
@@ -37,9 +67,13 @@ def create_csv(data_files: list[str], file_name: str) -> None:
 
                     processed_line.append(first_chunk)
                     processed_line.append(second_chunk)
-                    if value != "NIL" and len(explanation) <= 4 and explanation != 'ALIC':
-                        processed_line.append(int(value))
-                        processed_line.append(explanation)
+
+                    # interesuje nas wszystko poza ALIC i NOALIC - tego nie uwzgledniamy
+                    if value != "NIL" and len(explanation) <= 4 and explanation != 'ALIC':  
+                        exp = one_hot_encoding_type(explanation)
+                        val = one_hot_encoding_score(value)
+                        vector = val+exp
+                        processed_line.append(vector)
                         processed_file.append(processed_line)
 
                 if alignment_start_pattern.match(line):
@@ -49,7 +83,7 @@ def create_csv(data_files: list[str], file_name: str) -> None:
 
     with open(file_name, "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(['chunk1', 'chunk2', 'value', 'explanation'])
+        writer.writerow(['chunk1', 'chunk2', 'vector'])
         writer.writerows(processed_files)
 
 

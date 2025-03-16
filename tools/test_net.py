@@ -50,6 +50,7 @@ def main():
     logger.info("Running with config:\n{}".format(config))
 
     model = RobertaISTS.build_model_from_cfg(config)
+    # model.load_state_dict(torch.load(config.TEST.WEIGHT))
     model.load_state_dict(torch.load(config.TEST.WEIGHT))
     val_loader = build_data_loader(config, config.DATASETS.TEST,is_train=False)
 

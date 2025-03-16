@@ -4,8 +4,8 @@ import torch
 # Values to fall back on in case no config file is passed
 # Basic parameters
 DEFAULT_DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
-DEFAULT_NUM_CLASSES = 6
-DEFAULT_DROPOUT = 0.25
+DEFAULT_NUM_CLASSES = 12 # 6
+DEFAULT_DROPOUT = 0.1 # 0.25
 DEFAULT_HIDDEN_NEURONS = 1024
 
 # List of the dataset names for training
